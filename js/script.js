@@ -13,9 +13,9 @@ const messageEl = document.getElementById('message')
 
 //display 5 random numbers after the start click, and start a 30 second countdown
 
-// our global variables goes here (WIP some can be added)
+// our global variables goes here (WIP, some can be added)
 let numberList = [] //empty array for our numbers
-let countdown = 30 //countdown 
+let countdown = 1 //countdown 
 let timer //timer empty variable 
 let userAnswer = [] //user answers
 let correctAnswer = [] //user correct answers
@@ -64,9 +64,17 @@ startButtonEl.addEventListener('click', function () {
 answersForm.addEventListener('submit', function (e) { //we need user submit, but we must avoid refresh 
     e.preventDefault() //no refresh
 
+    userAnswer = [] //here we empty our variables to avoid duplicates from old submit without refresh
+    correctAnswer = []
+
+
     for (let i = 0; i < inputFieldsEl.length; i++) { //cycle the inputFieldsEl array
         const userNumber = parseInt(inputFieldsEl[i].value); //parseInt convert the string to number, we transfer the value of inputFieldsEl on userNumber
-
+        
+        if (userAnswer.includes(userNumber)) { //if the user put 2 equal numbers he got error and must retry the submit
+        messageEl.innerText = "Errore: hai inserito numeri uguali! Riprova."
+            return
+        }
         userAnswer.push(userNumber) // we push userNumber in userAnswer after cycling
 
         if (numberList.includes(userNumber) && !correctAnswer.includes(userNumber)) { //IF numberList include value from userNumber AND correctAnswer NOT include already userNumber
@@ -79,7 +87,7 @@ answersForm.addEventListener('submit', function (e) { //we need user submit, but
     console.log("Numeri inseriti dall'utente:", userAnswer);
     console.log("Numeri indovinati:", correctAnswer);
 
-    messageEl.innerText = `Hai indovinato: ${correctAnswer.length} numeri. I numeri indovinati sono ${correctAnswer}  I numeri da indovinare erano ${numberList}` //now the user can see the result of the game and the number he got 
+    messageEl.innerText = `Hai indovinato: ${correctAnswer.length} numeri. Ecco i numeri corretti: ${correctAnswer}. I numeri da indovinare erano:  ${numberList}` //now the user can see the result of the game and the number he got 
 })
 
 /* console.log(inputFieldsEl); */
